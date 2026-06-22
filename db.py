@@ -33,12 +33,12 @@ def get_connection():
     per request because serverless functions cannot safely reuse
     a single long-lived connection across invocations.
     """
-    db_url = os.environ.get("DATABASE_URL")
+    
+    db_url = os.environ.get("POSTGRES_URL") or os.environ.get("DATABASE_URL")
     if not db_url:
         raise RuntimeError(
-            "DATABASE_URL environment variable is not set. "
-            "Add a Postgres database to your Vercel project "
-            "(Storage tab) or set DATABASE_URL locally in .env"
+            "No Postgres URL found. Add a Postgres database in "
+            "Vercel Storage tab (POSTGRES_URL) or set DATABASE_URL in .env"
         )
     return psycopg2.connect(db_url)
 

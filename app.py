@@ -35,18 +35,24 @@ def upload():
     if not PDF_AVAILABLE:
         return "PDF processing unavailable. Check server logs.", 500
 
-    file = request.files["pdf"]
+    if not DB_AVAILABLE:
+        return "Database not connected. Add Postgres in Vercel Storage tab.", 500
+
+    file = request.files.get("pdf")
+    if not file or file.filename == "":
+        return "No file selected.", 400
+
     path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(path)
 
-    data, book_name = process_pdf(path)
+    try:
+        data, book_name = process_pdf(path)
+    except Exception as e:
+        return f"PDF processing failed: {e}", 500
 
-    if DB_AVAILABLE:
-        book_id = str(uuid.uuid4())
-        db.save_book(book_id, book_name, data)
-        session["book_id"] = book_id
-    else:
-        return "Database unavailable. Check DATABASE_URL env var.", 500
+    book_id = str(uuid.uuid4())
+    db.save_book(book_id, book_name, data)
+    session["book_id"] = book_id
 
     return render_template("index.html", data=data, book_name=book_name)
 
