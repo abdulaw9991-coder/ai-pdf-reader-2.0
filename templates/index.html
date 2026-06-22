@@ -27,6 +27,13 @@
 
 <hr>
 
+<!-- ERROR MESSAGE -->
+{% if error %}
+<div style="background:#ffe0e0; border-left:4px solid red; padding:15px; margin:10px; border-radius:5px;">
+    <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
+
 <!-- FULL DATA VIEW -->
 {% if data %}
 
@@ -44,11 +51,11 @@
 
         <h3>📍 {{ topic }}</h3>
 
-        <p>{{ content.text }}...</p>
+        <p>{{ content.text }}</p>
 
         <div class="images">
             {% for img in content.images %}
-                <img src="{{ img }}" width="120">
+                <img src="{{ img }}" width="120" style="margin:5px; border-radius:5px;">
             {% endfor %}
         </div>
 
@@ -74,11 +81,11 @@
 
     <h3>{{ key }}</h3>
 
-    <p>{{ content.text[:400] }}...</p>
+    <p>{{ content.text }}</p>
 
     <div class="images">
         {% for img in content.images %}
-            <img src="{{ img }}" width="120">
+            <img src="{{ img }}" width="120" style="margin:5px; border-radius:5px;">
         {% endfor %}
     </div>
 
@@ -87,11 +94,6 @@
 {% endfor %}
 
 {% endif %}
-{% if error %}
 
-<div style="background:#ffe0e0; border-left:4px solid red; padding:15px; margin:10px; border-radius:5px;">
-    <strong>Error:</strong> {{ error }}
-</div>
-{% endif %}
 </body>
 </html>
