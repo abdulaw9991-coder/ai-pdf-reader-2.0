@@ -41,5 +41,4 @@ $RECYCLE.BIN/
 *.zip
 *.rar
 
-# macOS
-.DS_Store
+
