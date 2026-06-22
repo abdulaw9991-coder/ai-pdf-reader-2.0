@@ -87,6 +87,11 @@
 {% endfor %}
 
 {% endif %}
+{% if error %}
 
+<div style="background:#ffe0e0; border-left:4px solid red; padding:15px; margin:10px; border-radius:5px;">
+    <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
 </body>
 </html>

@@ -19,10 +19,8 @@ def detect_topic(text):
 
 
 def safe_init(data, chapter, topic):
-
     if chapter not in data:
         data[chapter] = {}
-
     if topic not in data[chapter]:
         data[chapter][topic] = {
             "text": "",
@@ -31,16 +29,6 @@ def safe_init(data, chapter, topic):
 
 
 def process_pdf(pdf_path):
-    """
-    CHANGED FOR VERCEL:
-    Images are no longer written to static/output/ on local disk
-    (that folder is read-only and ephemeral on Vercel). Each
-    extracted image is now uploaded to Vercel Blob via
-    storage.upload_image(), and the returned permanent URL is stored
-    in data[chapter][topic]["images"] instead of a local file path.
-    Everything else (chapter/topic detection, text accumulation) is
-    unchanged from the original project.
-    """
 
     doc = fitz.open(pdf_path)
 
@@ -74,7 +62,6 @@ def process_pdf(pdf_path):
         images = page.get_images(full=True)
 
         for i, img in enumerate(images):
-
             try:
                 xref = img[0]
                 base = doc.extract_image(xref)
@@ -93,8 +80,10 @@ def process_pdf(pdf_path):
                 )
 
                 data[current_chapter][current_topic]["images"].append(image_url)
+                print(f"Image uploaded: {image_url}")
 
-            except Exception:
+            except Exception as e:
+                print(f"Image failed page {page_num} img {i}: {e}")
                 pass
 
     doc.close()

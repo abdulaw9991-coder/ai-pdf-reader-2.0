@@ -29,11 +29,10 @@ def home():
     data, book_name = _load_current_book()
     return render_template("index.html", data=data, book_name=book_name)
 
-
 @app.route("/upload", methods=["POST"])
 def upload():
     if not PDF_AVAILABLE:
-        return "PDF processing unavailable. Check server logs.", 500
+        return "PDF processing unavailable.", 500
 
     if not DB_AVAILABLE:
         return "Database not connected. Add Postgres in Vercel Storage tab.", 500
@@ -41,6 +40,19 @@ def upload():
     file = request.files.get("pdf")
     if not file or file.filename == "":
         return "No file selected.", 400
+
+    # Check file size - warn if over 4MB
+    file.seek(0, 2)
+    file_size = file.tell()
+    file.seek(0)
+
+    if file_size > 4 * 1024 * 1024:
+        return render_template(
+            "index.html",
+            error="PDF is too large for direct upload (max 4MB on Vercel free plan). Please use a smaller PDF or upgrade to Vercel Pro.",
+            book_name=None,
+            data=None
+        )
 
     path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(path)
