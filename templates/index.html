@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI PDF Search System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<h1>📚 AI PDF Chapter Search System</h1>
+
+<!-- UPLOAD -->
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="pdf" required>
+    <button type="submit">Upload PDF</button>
+</form>
+
+<hr>
+
+<!-- SEARCH BAR -->
+<h2>🔍 Search PDF</h2>
+
+<form action="/search" method="POST">
+    <input type="text" name="query" placeholder="Search Chapter / Topic / Text">
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+<!-- FULL DATA VIEW -->
+{% if data %}
+
+<h2>📖 Book: {{ book_name }}</h2>
+
+{% for chapter, topics in data.items() %}
+
+<div class="chapter">
+
+    <h2>📌 {{ chapter }}</h2>
+
+    {% for topic, content in topics.items() %}
+
+    <div class="topic">
+
+        <h3>📍 {{ topic }}</h3>
+
+        <p>{{ content.text[:300] }}...</p>
+
+        <div class="images">
+            {% for img in content.images %}
+                <img src="{{ img }}" width="120">
+            {% endfor %}
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+
+<!-- SEARCH RESULTS -->
+{% if search_results %}
+
+<h2>🔎 Search Results</h2>
+
+{% for key, content in search_results.items() %}
+
+<div class="result">
+
+    <h3>{{ key }}</h3>
+
+    <p>{{ content.text[:400] }}...</p>
+
+    <div class="images">
+        {% for img in content.images %}
+            <img src="{{ img }}" width="120">
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+    font-family: Arial;
+    background: #f5f5f5;
+    padding: 20px;
+}
+
+.chapter {
+    background: white;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.topic {
+    margin-left: 20px;
+    padding: 10px;
+    border-left: 4px solid blue;
+}
+
+.result {
+    background: #e8fff0;
+    margin: 10px;
+    padding: 10px;
+    border-left: 4px solid green;
+}
+
+img {
+    margin: 5px;
+    border-radius: 5px;
+}
